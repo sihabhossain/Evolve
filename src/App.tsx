@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { SelectedPage } from "@/shared/types";
 import Navbar from "./components/navbar";
 import Home from "./components/home";
-import OurClasses from "./components/ourClasses";
+import OurClasses from "./components/ourTestimonials";
 import ContactUs from "./components/contactUs";
 import Footer from "./components/footer";
 import Featured from "./components/featured";
+import HowItWorks from "./components/howItWorks/HowItWorks";
 
 function App() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(
@@ -34,6 +35,7 @@ function App() {
       />
       <Home setSelectedPage={setSelectedPage} />
       <Featured setSelectedPage={setSelectedPage} />
+      <HowItWorks />
       <OurClasses setSelectedPage={setSelectedPage} />
       <ContactUs setSelectedPage={setSelectedPage} />
       <Footer />

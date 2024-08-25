@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { SelectedPage } from "@/shared/types";
 import { motion } from "framer-motion";
-import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.png";
+import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.jpg";
 import HText from "@/shared/HText";
 
 type Props = {
@@ -26,7 +26,7 @@ const ContactUs = ({ setSelectedPage }: Props) => {
   };
 
   return (
-    <section id="contactus" className="mx-auto w-5/6 pt-24 pb-32">
+    <section id="contactus" className="mx-auto w-5/6 pb-32 pt-24">
       <motion.div
         onViewportEnter={() => setSelectedPage(SelectedPage.ContactUs)}
       >
@@ -41,21 +41,12 @@ const ContactUs = ({ setSelectedPage }: Props) => {
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0 },
           }}
-        >
-          <HText>
-            <span className="text-primary-500">JOIN NOW</span> TO GET IN SHAPE
-          </HText>
-          <p className="my-5">
-            Congue adipiscing risus commodo placerat. Tellus et in feugiat nisl
-            sapien vel rhoncus. Placerat at in enim pellentesque. Nulla
-            adipiscing leo egestas nisi elit risus sit. Nunc cursus sagittis.
-          </p>
-        </motion.div>
+        ></motion.div>
 
         {/* FORM AND IMAGE */}
-        <div className="mt-10 justify-between gap-8 md:flex">
+        <div className="mt-10 flex items-center justify-between gap-8 md:flex-row">
           <motion.div
-            className="mt-10 basis-3/5 md:mt-0"
+            className="mt-10 w-full md:mt-0 md:w-1/2"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -65,6 +56,14 @@ const ContactUs = ({ setSelectedPage }: Props) => {
               visible: { opacity: 1, y: 0 },
             }}
           >
+            <HText>
+              <span className="text-primary-500">JOIN NOW</span> TO GET IN SHAPE
+            </HText>
+            <p className="my-5">
+              Congue adipiscing risus commodo placerat. Tellus et in feugiat
+              nisl sapien vel rhoncus. Placerat at in enim pellentesque. Nulla
+              adipiscing leo egestas nisi elit risus sit. Nunc cursus sagittis.
+            </p>
             <form
               target="_blank"
               onSubmit={onSubmit}
@@ -134,7 +133,7 @@ const ContactUs = ({ setSelectedPage }: Props) => {
           </motion.div>
 
           <motion.div
-            className="relative mt-16 basis-2/5 md:mt-0"
+            className="relative mt-16 w-full md:mt-0 md:w-1/2"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -144,9 +143,9 @@ const ContactUs = ({ setSelectedPage }: Props) => {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <div className="w-full before:absolute before:-bottom-20 before:-right-10 before:z-[-1] md:before:content-evolvetext">
+            <div className="w-full  before:absolute before:-bottom-20 before:-right-10 before:z-[-1] md:before:content-evolvetext">
               <img
-                className="w-full"
+                className="w-full rounded-lg "
                 alt="contact-us-page-graphic"
                 src={ContactUsPageGraphic}
               />
