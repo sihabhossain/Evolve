@@ -40,10 +40,28 @@ const steps = [
 
 const HowItWorks: React.FC = () => {
   return (
-    <section className="how-it-works bg-gray-20 py-16">
+    <motion.section
+      className="how-it-works bg-gray-20 py-16"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
       <div className="container mx-auto text-center">
-        <h2 className="mb-8 text-3xl font-bold text-gray-800">How It Works</h2>
-        <div className="lg:grid-cols-5 grid grid-cols-1 items-center gap-8 md:grid-cols-3">
+        <motion.h2
+          className="mb-8 text-3xl font-bold text-gray-800"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          How It Works
+        </motion.h2>
+
+        <motion.div
+          className="lg:grid-cols-5 grid grid-cols-1 items-center gap-8 md:grid-cols-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           {steps.map(({ step, title, description, icon }, index) => (
             <React.Fragment key={step}>
               <motion.div
@@ -79,9 +97,9 @@ const HowItWorks: React.FC = () => {
               )}
             </React.Fragment>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

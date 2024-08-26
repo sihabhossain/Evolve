@@ -1,4 +1,3 @@
-
 import { SelectedPage } from "@/shared/types";
 import ActionButton from "@/shared/ActionButton";
 import HomePageGraphic from "@/assets/HomePageGraphic.png";
@@ -7,40 +6,48 @@ import { motion } from "framer-motion";
 
 const Home = () => {
   return (
-    <section id="home" className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0">
+    <motion.section
+      id="home"
+      className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
+    >
       {/* IMAGE AND MAIN HEADER */}
-      <motion.div className="mx-auto w-5/6 items-center justify-center md:flex md:h-5/6">
+      <motion.div
+        className="mx-auto w-5/6 items-center justify-center md:flex md:h-5/6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         {/* MAIN HEADER */}
-        <div className="z-10 mt-32 md:basis-3/5">
+        <motion.div
+          className="z-10 mt-32 md:basis-3/5"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           {/* HEADINGS */}
           <motion.div
-            className="md:-mt-20"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            className="relative"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
           >
             <div className="relative">
               <div className="before:absolute before:-left-20 before:-top-20 before:z-[-1] md:before:content-evolvetext">
-                <div>
-                  <h1>
-                    <span className="font-bold text-secondary-500 md:text-6xl">
-                      Book Your Playtime,
+                <h1>
+                  <span className="font-bold text-secondary-500 md:text-6xl">
+                    Book Your Playtime,
+                  </span>
+                  <div>
+                    <span>
+                      Anytime – Unlock the Best Sports Facilities Near You!
                     </span>
-                    <div>
-                      <span>
-                        Anytime – Unlock the Best Sports Facilities Near You!
-                      </span>
-                    </div>
-                  </h1>
-                </div>
+                  </div>
+                </h1>
               </div>
             </div>
-
             <p className="mt-8 text-sm">
               Unrivaled Gym. Unparalleled Training Fitness Classes. World Class
               Studios to get the Body Shapes That you Dream of.. Get Your Dream
@@ -51,14 +58,9 @@ const Home = () => {
           {/* ACTIONS */}
           <motion.div
             className="mt-8 flex items-center gap-8"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
           >
             <ActionButton>Book Now</ActionButton>
             <AnchorLink
@@ -68,17 +70,19 @@ const Home = () => {
               <p>Learn More</p>
             </AnchorLink>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* IMAGE */}
-        <div
-          className="flex basis-3/5 justify-center md:z-10
-              md:ml-40 md:mt-16 md:justify-items-end"
+        <motion.div
+          className="flex basis-3/5 justify-center md:z-10 md:ml-40 md:mt-16 md:justify-items-end"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
         >
           <img alt="home-pageGraphic" src={HomePageGraphic} />
-        </div>
+        </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };
 

@@ -34,12 +34,14 @@ const ContactUs = () => {
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0 },
           }}
-        ></motion.div>
+        >
+          {/* Header content can be added here */}
+        </motion.div>
 
         {/* FORM AND IMAGE */}
-        <div className="mt-10 flex items-center justify-between gap-8 md:flex-row">
+        <div className="mt-10 flex flex-col gap-8 md:flex-row md:gap-16">
           <motion.div
-            className="mt-10 w-full md:mt-0 md:w-1/2"
+            className="w-full md:w-1/2"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -50,7 +52,8 @@ const ContactUs = () => {
             }}
           >
             <HText>
-              <span className="text-primary-500">JOIN NOW</span> TO GET IN SHAPE
+              <span className="text-primary-500">PLEASE</span> PROVIDE YOUR
+              VALUABLE FEEDBACK
             </HText>
             <p className="my-5">
               Congue adipiscing risus commodo placerat. Tellus et in feugiat
@@ -62,6 +65,7 @@ const ContactUs = () => {
               onSubmit={onSubmit}
               action="https://formsubmit.co/e8a5bdfa807605332f809e5656e27c6e"
               method="POST"
+              className="space-y-5"
             >
               <input
                 className={inputStyles}
@@ -101,7 +105,6 @@ const ContactUs = () => {
                 className={inputStyles}
                 placeholder="MESSAGE"
                 rows={4}
-                cols={50}
                 {...register("message", {
                   required: true,
                   maxLength: 2000,
@@ -118,7 +121,7 @@ const ContactUs = () => {
 
               <button
                 type="submit"
-                className="mt-5 rounded-lg bg-secondary-500 px-20 py-3 transition duration-500 hover:text-white"
+                className="hover:bg-secondary-600 mt-5 rounded-lg bg-secondary-500 px-8 py-3 transition duration-500 hover:text-white"
               >
                 SUBMIT
               </button>
@@ -126,7 +129,7 @@ const ContactUs = () => {
           </motion.div>
 
           <motion.div
-            className="relative mt-16 w-full md:mt-0 md:w-1/2"
+            className="relative w-full md:w-1/2"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -136,9 +139,9 @@ const ContactUs = () => {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <div className="w-full  before:absolute before:-bottom-20 before:-right-10 before:z-[-1] md:before:content-evolvetext">
+            <div className="relative">
               <img
-                className="w-full rounded-lg "
+                className="w-full rounded-lg"
                 alt="contact-us-page-graphic"
                 src={ContactUsPageGraphic}
               />

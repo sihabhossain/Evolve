@@ -3,6 +3,7 @@ import ContactUs from "./components/contactUs";
 import Featured from "./components/featured";
 import HowItWorks from "./components/howItWorks/HowItWorks";
 import OurTestimonials from "./components/ourTestimonials";
+import Benefits from "./components/benefits/Benefits";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <Featured />
       <HowItWorks />
       <OurTestimonials />
-     
+      <Benefits />
     </div>
   );
 }
