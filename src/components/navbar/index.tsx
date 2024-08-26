@@ -5,6 +5,7 @@ import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/shared/ActionButton";
+import { NavLink } from "react-router-dom";
 
 type Props = {
   isTopOfPage: boolean;
@@ -26,7 +27,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         <div className={`${flexBetween} mx-auto w-5/6`}>
           <div className={`${flexBetween} w-full gap-16`}>
             {/* LEFT SIDE */}
-            <img alt="logo" src={Logo} sizes="20px" />
+            <NavLink to={"/"}>
+              <img alt="logo" src={Logo} sizes="20px" />
+            </NavLink>
 
             {/* RIGHT SIDE */}
             {isAboveMediumScreens ? (

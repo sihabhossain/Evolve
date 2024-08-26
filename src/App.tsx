@@ -11,7 +11,7 @@ function App() {
       <Featured />
       <HowItWorks />
       <OurTestimonials />
-      <ContactUs />
+     
     </div>
   );
 }
