@@ -1,8 +1,8 @@
-import ActionButton from "@/shared/ActionButton";
+
 import HText from "@/shared/HText";
-import { FacilityType, SelectedPage } from "@/shared/types";
+import { FacilityType } from "@/shared/types";
 import { motion } from "framer-motion";
-import BenefitsPageGraphic from "@/assets/BenefitsPageGraphic.png";
+
 import Facility from "./Featured";
 
 const benefits: Array<FacilityType> = [
@@ -47,16 +47,10 @@ const container = {
   },
 };
 
-type Props = {
-  setSelectedPage: (value: SelectedPage) => void;
-};
-
-const Featured = ({ setSelectedPage }: Props) => {
+const Featured = () => {
   return (
     <section id="benefits" className="mx-auto min-h-full w-5/6 py-20">
-      <motion.div
-        onViewportEnter={() => setSelectedPage(SelectedPage.Benefits)}
-      >
+      <motion.div>
         {/* HEADER */}
         <motion.div
           className="md:my-5 md:w-3/5"
@@ -93,7 +87,6 @@ const Featured = ({ setSelectedPage }: Props) => {
               pricePerHour={facility.pricePerHour}
               location={facility.location}
               image={facility.image}
-              setSelectedPage={setSelectedPage}
             />
           ))}
         </motion.div>

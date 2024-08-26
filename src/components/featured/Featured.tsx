@@ -1,4 +1,4 @@
-import { SelectedPage } from "@/shared/types";
+
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -13,7 +13,6 @@ type Props = {
   pricePerHour: number;
   location: string;
   image: string;
-  setSelectedPage: (page: SelectedPage) => void;
 };
 
 const Facility = ({
@@ -22,7 +21,6 @@ const Facility = ({
   pricePerHour,
   location,
   image,
-  setSelectedPage,
 }: Props) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -50,10 +48,7 @@ const Facility = ({
       </p>
       <p className="text-sm text-gray-600">Location: {location}</p>
 
-      <button
-        onClick={() => setSelectedPage(SelectedPage.ContactUs)}
-        className="hover:bg-primary-600 mt-4 rounded-lg bg-primary-500 px-6 py-2 text-white shadow-md transition-colors"
-      >
+      <button className="hover:bg-primary-600 mt-4 rounded-lg bg-primary-500 px-6 py-2 text-white shadow-md transition-colors">
         Book Now
       </button>
     </motion.div>

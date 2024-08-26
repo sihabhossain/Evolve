@@ -1,4 +1,4 @@
-import { SelectedPage, ClassType } from "@/shared/types";
+import { ClassType } from "@/shared/types";
 import image1 from "@/assets/image1.jpg";
 import image2 from "@/assets/image2.jpg";
 import image3 from "@/assets/image3.avif";
@@ -48,16 +48,10 @@ const classes: Array<ClassType> = [
   },
 ];
 
-type Props = {
-  setSelectedPage: (value: SelectedPage) => void;
-};
-
-const OurClasses = ({ setSelectedPage }: Props) => {
+const OurTestimonials = () => {
   return (
     <section id="ourclasses" className="w-full bg-primary-100 py-40">
-      <motion.div
-        onViewportEnter={() => setSelectedPage(SelectedPage.OurClasses)}
-      >
+      <motion.div>
         <motion.div
           className="mx-auto w-5/6"
           initial="hidden"
@@ -96,4 +90,4 @@ const OurClasses = ({ setSelectedPage }: Props) => {
   );
 };
 
-export default OurClasses;
+export default OurTestimonials;
