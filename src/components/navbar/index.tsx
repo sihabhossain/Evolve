@@ -33,29 +33,39 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               <div className={`${flexBetween} w-full`}>
                 <div className={`${flexBetween} gap-8 text-sm`}>
                   <Link
-                    page="Home"
+                    page="About"
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
                   />
                   <Link
-                    page="Benefits"
+                    page="Facilities"
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
                   />
                   <Link
-                    page="Our Classes"
+                    page="Contact"
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
                   />
                   <Link
-                    page="Contact Us"
+                    page="Dashboard"
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
                   />
                 </div>
                 <div className={`${flexBetween} gap-8`}>
-                  <p>Sign In</p>
-                  <ActionButton>Become a Member</ActionButton>
+                  <Link
+                    page="Login"
+                    selectedPage={selectedPage}
+                    setSelectedPage={setSelectedPage}
+                  />
+                  <ActionButton>
+                    <Link
+                      page="Registration"
+                      selectedPage={selectedPage}
+                      setSelectedPage={setSelectedPage}
+                    />
+                  </ActionButton>
                 </div>
               </div>
             ) : (
@@ -88,17 +98,34 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               setSelectedPage={setSelectedPage}
             />
             <Link
-              page="Benefits"
+              page="About"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+
+            <Link
+              page="Facilities"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
             />
             <Link
-              page="Our Classes"
+              page="Contact"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
             />
             <Link
-              page="Contact Us"
+              page="Dashboard"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+            <Link
+              page="Login"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+
+            <Link
+              page="Registration"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
             />
