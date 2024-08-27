@@ -3,6 +3,7 @@ import ActionButton from "@/shared/ActionButton";
 import HomePageGraphic from "@/assets/HomePageGraphic.png";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -62,7 +63,9 @@ const Home = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <ActionButton>Book Now</ActionButton>
+            <NavLink to={"/facilities"}>
+              <ActionButton>Book Now</ActionButton>
+            </NavLink>
             <AnchorLink
               className="text-sm font-bold text-primary-500 underline hover:text-secondary-500"
               href={`#${SelectedPage.ContactUs}`}
