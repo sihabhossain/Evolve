@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { Menu, X, Home, Calendar, User, ActivityIcon } from "lucide-react";
+import {
+  Menu,
+  X,
+  Home,
+  Calendar,
+  User,
+  ActivityIcon,
+  LogOut,
+  ArrowRight,
+} from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="relative flex h-screen bg-gray-900 text-gray-100">
+    <div className="relative flex h-screen overflow-hidden bg-gray-900 text-gray-100">
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-gray-800 text-gray-100 transition-transform ${
@@ -59,6 +68,23 @@ const AdminLayout = () => {
             {/* Add more admin-specific links here */}
           </ul>
         </nav>
+        {/* Sidebar Footer */}
+        <div className="absolute bottom-0 left-0 w-full bg-gray-700 p-4">
+          <NavLink to={"/"}>
+            <button
+              className="flex w-full items-center rounded p-2 text-gray-300 hover:bg-gray-600 hover:text-gray-100"
+              onClick={() => console.log("Exit clicked")}
+            >
+              <ArrowRight size={20} className="mr-2" /> Exit
+            </button>
+          </NavLink>
+          <button
+            className="mt-2 flex w-full items-center rounded p-2 text-gray-300 hover:bg-gray-600 hover:text-gray-100"
+            onClick={() => console.log("Logout clicked")}
+          >
+            <LogOut size={20} className="mr-2" /> Logout
+          </button>
+        </div>
       </aside>
 
       {/* Overlay for mobile */}
@@ -85,7 +111,9 @@ const AdminLayout = () => {
 
           <h2>Admin Dashboard</h2>
         </div>
-        <Outlet />
+        <div className="max-h-screen overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

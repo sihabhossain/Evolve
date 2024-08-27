@@ -3,7 +3,7 @@ import AdminLayout from "./AdminLayout";
 import UserLayout from "./UserLayout";
 
 const DashboardLayout = () => {
-  const [userRole, setUserRole] = useState("admin");
+  const [userRole, setUserRole] = useState("user");
   return <div>{userRole === "admin" ? <AdminLayout /> : <UserLayout />}</div>;
 };
 

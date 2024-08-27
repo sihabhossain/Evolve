@@ -14,7 +14,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import MyBookings from "./pages/dashboard/userDashboard/MyBookings";
 import HomePage from "./pages/dashboard/Home";
 import BookingsPage from "./pages/dashboard/adminDashboard/Bookings";
-import CreateAdminPage from "./pages/dashboard/adminDashboard/CreateAdmin";
+import CreateAdminPage from "./pages/dashboard/adminDashboard/AddAdmin";
 import FacilitiesPage from "./pages/dashboard/adminDashboard/Facilities";
 
 const router = createBrowserRouter([
