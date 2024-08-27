@@ -9,6 +9,7 @@ import ContactPage from "./pages/contact/Contact";
 import ErrorPage from "./pages/error/Error";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store";
+import AuthPage from "./pages/auth/AuthPage";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactPage />,
+      },
+      {
+        path: "/login",
+        element: <AuthPage />,
       },
     ],
   },
