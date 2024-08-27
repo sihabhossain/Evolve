@@ -1,5 +1,5 @@
 // UserLayout.jsx
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X, Home, Calendar, User } from "lucide-react";
 
@@ -26,30 +26,21 @@ const UserLayout = () => {
         <nav className="p-4">
           <ul>
             <li>
-              <a
-                href="/user/home"
+              <NavLink
+                to={"/dashboard"}
                 className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
               >
                 <Home size={20} className="mr-2" /> Home
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="/user/appointments"
+              <NavLink
+                to={"/dashboard/my-bookings"}
                 className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
               >
-                <Calendar size={20} className="mr-2" /> Appointments
-              </a>
+                <Calendar size={20} className="mr-2" /> My Bookings
+              </NavLink>
             </li>
-            <li>
-              <a
-                href="/user/profile"
-                className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
-              >
-                <User size={20} className="mr-2" /> Profile
-              </a>
-            </li>
-            {/* Add more user-specific links here */}
           </ul>
         </nav>
       </aside>

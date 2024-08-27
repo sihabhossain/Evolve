@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Menu, X, Home, BarChart, Settings } from "lucide-react";
+import { Menu, X, Home, Calendar, User, ActivityIcon } from "lucide-react";
+import { NavLink, Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -24,28 +25,36 @@ const AdminLayout = () => {
         <nav className="p-4">
           <ul>
             <li>
-              <a
-                href="/admin/home"
-                className="flex items-center rounded p-2 text-gray-300 hover:bg-green-600 hover:text-gray-100"
+              <NavLink
+                to={"/dashboard"}
+                className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
               >
                 <Home size={20} className="mr-2" /> Home
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="/admin/reports"
-                className="flex items-center rounded p-2 text-gray-300 hover:bg-blue-600 hover:text-gray-100"
+              <NavLink
+                to={"/dashboard/bookings"}
+                className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
               >
-                <BarChart size={20} className="mr-2" /> Reports
-              </a>
+                <Calendar size={20} className="mr-2" /> Bookings
+              </NavLink>
             </li>
             <li>
-              <a
-                href="/admin/settings"
-                className="flex items-center rounded p-2 text-gray-300 hover:bg-orange-600 hover:text-gray-100"
+              <NavLink
+                to={"/dashboard/facilities"}
+                className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
               >
-                <Settings size={20} className="mr-2" /> Settings
-              </a>
+                <ActivityIcon size={20} className="mr-2" /> Facilities
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={"/dashboard/add-admin"}
+                className="flex items-center rounded p-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
+              >
+                <User size={20} className="mr-2" /> Add Admin
+              </NavLink>
             </li>
             {/* Add more admin-specific links here */}
           </ul>
@@ -76,8 +85,7 @@ const AdminLayout = () => {
 
           <h2>Admin Dashboard</h2>
         </div>
-        <div>HELLO WORLD</div>
-        {/* Add Outlet here if needed */}
+        <Outlet />
       </div>
     </div>
   );
