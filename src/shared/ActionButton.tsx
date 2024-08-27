@@ -9,7 +9,7 @@ type Props = {
 const ActionButton = ({ children }: Props) => {
   return (
     <AnchorLink
-      className="rounded-md bg-primary-500 px-10 py-2 hover:bg-primary-300 hover:text-white"
+      className="rounded-md bg-primary-500 px-10 py-2 hover:bg-primary-300 "
       href={`#${SelectedPage.ContactUs}`}
     >
       {children}

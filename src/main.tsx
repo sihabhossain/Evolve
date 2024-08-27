@@ -10,6 +10,7 @@ import ErrorPage from "./pages/error/Error";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store";
 import AuthPage from "./pages/auth/AuthPage";
+import DashboardLayout from "./layout/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,13 @@ const router = createBrowserRouter([
         element: <AuthPage />,
       },
     ],
+  },
+
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
+    children: [],
   },
 ]);
 

@@ -57,21 +57,19 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   />
                 </div>
                 <div className={`${flexBetween} gap-8`}>
-                  <ActionButton>
-                    <Link
-                      page="Login"
-                      selectedPage={selectedPage}
-                      setSelectedPage={setSelectedPage}
-                    />
-                  </ActionButton>
+                  <NavLink to={"/login"}>
+                    <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
+                      Login
+                    </button>
+                  </NavLink>
                 </div>
               </div>
             ) : (
               <button
-                className="rounded-full bg-secondary-500 p-2"
+                className="bg-secondary-500 rounded-full p-2"
                 onClick={() => setIsMenuToggled(!isMenuToggled)}
               >
-                <Bars3Icon className="h-6 w-6 text-white" />
+                <Bars3Icon className="h-6 w-6 text-black" />
               </button>
             )}
           </div>
