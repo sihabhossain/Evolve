@@ -16,6 +16,7 @@ import HomePage from "./pages/dashboard/Home";
 import BookingsPage from "./pages/dashboard/adminDashboard/Bookings";
 import CreateAdminPage from "./pages/dashboard/adminDashboard/AddAdmin";
 import FacilitiesPage from "./pages/dashboard/adminDashboard/Facilities";
+import FacilityListingPage from "./pages/facilities/FacilityListingPage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <AuthPage />,
+      },
+      {
+        path: "/facilities",
+        element: <FacilityListingPage />,
       },
     ],
   },
