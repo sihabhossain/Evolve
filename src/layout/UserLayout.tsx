@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   Menu,
@@ -9,9 +9,21 @@ import {
   LogOut,
   ArrowRight,
 } from "lucide-react";
+import { useAppDispatch } from "@/redux/store/hooks";
+import { logOut } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 const UserLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/");
+    toast.success("User logged out successfully");
+  };
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-gray-900 text-gray-100">
@@ -62,7 +74,7 @@ const UserLayout = () => {
           </NavLink>
           <button
             className="mt-2 flex w-full items-center rounded p-2 text-gray-300 hover:bg-gray-600 hover:text-gray-100"
-            onClick={() => console.log("Logout clicked")}
+            onClick={() => handleLogout()}
           >
             <LogOut size={20} className="mr-2" /> Logout
           </button>

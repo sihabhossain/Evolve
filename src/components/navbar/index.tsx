@@ -4,8 +4,9 @@ import Logo from "@/assets/Logo.png";
 import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import ActionButton from "@/shared/ActionButton";
 import { NavLink } from "react-router-dom";
+import { useAppSelector } from "@/redux/store/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 type Props = {
   isTopOfPage: boolean;
@@ -18,6 +19,8 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
   const [isMenuToggled, setIsMenuToggled] = useState<boolean>(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   const navbarBackground = isTopOfPage ? "" : "bg-primary-100 drop-shadow";
+
+  const user = useAppSelector(selectCurrentUser);
 
   return (
     <nav>
@@ -50,18 +53,21 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
                   />
-                  <Link
-                    page="Dashboard"
-                    selectedPage={selectedPage}
-                    setSelectedPage={setSelectedPage}
-                  />
                 </div>
                 <div className={`${flexBetween} gap-8`}>
-                  <NavLink to={"/login"}>
-                    <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
-                      Login
-                    </button>
-                  </NavLink>
+                  {user ? (
+                    <NavLink to={"/dashboard"}>
+                      <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
+                        Dashboard
+                      </button>
+                    </NavLink>
+                  ) : (
+                    <NavLink to={"/login"}>
+                      <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
+                        Login
+                      </button>
+                    </NavLink>
+                  )}
                 </div>
               </div>
             ) : (
@@ -109,22 +115,20 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
             />
-            <Link
-              page="Dashboard"
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-            />
-            <Link
-              page="Login"
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-            />
 
-            <Link
-              page="Registration"
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-            />
+            {user ? (
+              <NavLink to={"/dashboard"}>
+                <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
+                  Dashboard
+                </button>
+              </NavLink>
+            ) : (
+              <NavLink to={"/login"}>
+                <button className="rounded-lg bg-primary-500 px-6 py-2 text-black hover:bg-primary-300 ">
+                  Login
+                </button>
+              </NavLink>
+            )}
           </div>
         </div>
       )}

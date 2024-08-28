@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useForm, FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import { User, Lock, Mail, Phone, MapPin } from "lucide-react";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/store/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 type FormData = {
   name?: string;
@@ -18,11 +23,35 @@ const AuthPage: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const [error, setError] = useState<string>("");
+  const [FormError, setFormError] = useState<string>("");
 
-  const onSubmitLogin = (data: FormData) => {
-    console.log("Login Data", data);
-    // Handle login logic
+  const navigate = useNavigate();
+
+  // dispatch
+  const dispatch = useAppDispatch();
+
+  // rtk query login and registration api
+  const [login, { error: loginError }] = useLoginMutation();
+
+  const onSubmitLogin = async (data: FormData) => {
+    try {
+      const userInfo = {
+        email: data.email,
+        password: data.password,
+      };
+
+      const res = await login(userInfo).unwrap();
+
+      dispatch(setUser({ user: res.data, token: res.token }));
+
+      if (res.statusCode === 200) {
+        toast.success(res.message);
+      }
+
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   const onSubmitRegister = (data: FormData) => {
@@ -59,8 +88,8 @@ const AuthPage: React.FC = () => {
           {isLogin ? "Login to Your Account" : "Create a New Account"}
         </h2>
 
-        {error && (
-          <p className="text-center font-semibold text-red-500">{error}</p>
+        {FormError && (
+          <p className="text-center font-semibold text-red-500">{FormError}</p>
         )}
 
         {isLogin ? (

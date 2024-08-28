@@ -8,7 +8,7 @@ import AboutPage from "./pages/about/About";
 import ContactPage from "./pages/contact/Contact";
 import ErrorPage from "./pages/error/Error";
 import { Provider } from "react-redux";
-import { store } from "./redux/store/store";
+import { persistor, store } from "./redux/store/store";
 import AuthPage from "./pages/auth/AuthPage";
 import DashboardLayout from "./layout/DashboardLayout";
 import MyBookings from "./pages/dashboard/userDashboard/MyBookings";
@@ -20,6 +20,9 @@ import FacilityListingPage from "./pages/facilities/FacilityListingPage";
 import FacilityDetailsPage from "./pages/facilities/FacilityDetailsPage"; // Import FacilityDetailsPage
 import BookingPage from "./pages/booking/BookingPage";
 import ScrollToTopButton from "./components/scrollToTop/ScrollToTop";
+import { Toaster } from "sonner";
+import { PersistGate } from "redux-persist/integration/react";
+import ProtectedRoute from "./layout/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -64,7 +67,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <HomePage />,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "my-bookings",
@@ -89,8 +96,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
       <ScrollToTopButton />
+      <Toaster richColors position="top-center" />
     </Provider>
   </React.StrictMode>
 );
