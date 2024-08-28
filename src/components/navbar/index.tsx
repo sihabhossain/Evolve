@@ -6,7 +6,7 @@ import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "@/redux/store/hooks";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
 
 type Props = {
   isTopOfPage: boolean;
@@ -20,7 +20,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   const navbarBackground = isTopOfPage ? "" : "bg-primary-100 drop-shadow";
 
-  const user = useAppSelector(selectCurrentUser);
+  const user = useAppSelector(useCurrentToken);
 
   return (
     <nav>

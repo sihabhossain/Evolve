@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { useForm, FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
-import { User, Lock, Mail, Phone, MapPin } from "lucide-react";
-import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { User, Lock, Mail, Phone, MapPin, Loader2 } from "lucide-react";
+import {
+  useLoginMutation,
+  useSignupMutation,
+} from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-
-type FormData = {
-  name?: string;
-  email: string;
-  password: string;
-  phone?: string;
-  address?: string;
-  role?: string;
-};
+import { FormData } from "@/types/types";
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,6 +18,7 @@ const AuthPage: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [FormError, setFormError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -31,10 +27,12 @@ const AuthPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // rtk query login and registration api
-  const [login, { error: loginError }] = useLoginMutation();
+  const [login] = useLoginMutation();
+  const [signup] = useSignupMutation();
 
   const onSubmitLogin = async (data: FormData) => {
     try {
+      setIsSubmitting(true);
       const userInfo = {
         email: data.email,
         password: data.password,
@@ -51,12 +49,35 @@ const AuthPage: React.FC = () => {
       navigate("/");
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const onSubmitRegister = (data: FormData) => {
-    console.log("Register Data", data);
-    // Handle registration logic
+  const onSubmitRegister = async (data: FormData) => {
+    try {
+      setIsSubmitting(true);
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        address: data.address,
+        role: "user", // Automatically set the role to "user"
+      };
+
+      const res = await signup(userInfo).unwrap();
+
+      dispatch(setUser({ user: res.data, token: res.token }));
+
+      toast.success(res.message);
+
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleForm = () => setIsLogin(!isLogin);
@@ -126,8 +147,12 @@ const AuthPage: React.FC = () => {
 
             <button
               type="submit"
-              className="hover:bg-primary-600 w-full rounded-md bg-primary-500 py-3 font-semibold text-white transition duration-300 focus:outline-none focus:ring-4 focus:ring-primary-300"
+              disabled={isSubmitting}
+              className="hover:bg-primary-600 flex w-full items-center justify-center rounded-md bg-primary-500 py-3 font-semibold text-white transition duration-300 focus:outline-none focus:ring-4 focus:ring-primary-300"
             >
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : null}
               Login
             </button>
           </form>
@@ -208,12 +233,17 @@ const AuthPage: React.FC = () => {
               </p>
             )}
 
+            {/* Role is automatically set to "user" */}
             <input type="hidden" {...register("role")} value="user" />
 
             <button
               type="submit"
-              className="hover:bg-primary-600 w-full rounded-md bg-primary-500 py-3 font-semibold text-white transition duration-300 focus:outline-none focus:ring-4 focus:ring-primary-300"
+              disabled={isSubmitting}
+              className="hover:bg-primary-600 flex w-full items-center justify-center rounded-md bg-primary-500 py-3 font-semibold text-white transition duration-300 focus:outline-none focus:ring-4 focus:ring-primary-300"
             >
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : null}
               Sign Up
             </button>
           </form>
@@ -221,12 +251,12 @@ const AuthPage: React.FC = () => {
 
         <p className="text-center text-gray-500">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <button
+          <span
+            className="cursor-pointer font-semibold text-primary-500 hover:underline"
             onClick={toggleForm}
-            className="hover:text-primary-400 font-semibold text-primary-500"
           >
             {isLogin ? "Sign Up" : "Login"}
-          </button>
+          </span>
         </p>
       </div>
     </div>
