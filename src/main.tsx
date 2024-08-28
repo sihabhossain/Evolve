@@ -17,6 +17,9 @@ import BookingsPage from "./pages/dashboard/adminDashboard/Bookings";
 import CreateAdminPage from "./pages/dashboard/adminDashboard/AddAdmin";
 import FacilitiesPage from "./pages/dashboard/adminDashboard/Facilities";
 import FacilityListingPage from "./pages/facilities/FacilityListingPage";
+import FacilityDetailsPage from "./pages/facilities/FacilityDetailsPage"; // Import FacilityDetailsPage
+import BookingPage from "./pages/booking/BookingPage";
+import ScrollToTopButton from "./components/scrollToTop/ScrollToTop";
 
 const router = createBrowserRouter([
   {
@@ -44,9 +47,16 @@ const router = createBrowserRouter([
         path: "/facilities",
         element: <FacilityListingPage />,
       },
+      {
+        path: "/facilities/:id",
+        element: <FacilityDetailsPage />,
+      },
+      {
+        path: "/booking",
+        element: <BookingPage />,
+      },
     ],
   },
-
   {
     path: "/dashboard",
     element: <DashboardLayout />,
@@ -80,6 +90,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ScrollToTopButton />
     </Provider>
   </React.StrictMode>
 );
