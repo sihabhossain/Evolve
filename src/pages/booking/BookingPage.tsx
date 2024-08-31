@@ -49,7 +49,6 @@ const BookingPage: React.FC = () => {
 
     setError(null);
     // Simulate API call
-    // Example response: setAvailability(["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"]);
     setAvailability(["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"]);
   };
 
@@ -75,8 +74,13 @@ const BookingPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!token || !facility) {
-      setConfirmation("Error: Missing token or facility information.");
+    if (!token) {
+      navigate("/login"); // Redirect to login page if not authenticated
+      return;
+    }
+
+    if (!facility) {
+      setConfirmation("Error: No facility selected.");
       return;
     }
 
