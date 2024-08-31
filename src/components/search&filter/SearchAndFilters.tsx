@@ -20,7 +20,7 @@ const SearchAndFilters: React.FC<{
     }
   };
 
-  // Validate if filter button should be disabled
+  // Validate if the filter button should be disabled
   const isFilterDisabled =
     !minPrice ||
     !maxPrice ||
@@ -30,42 +30,52 @@ const SearchAndFilters: React.FC<{
 
   return (
     <div className="flex flex-col items-center justify-between rounded-lg bg-gray-20 p-4 shadow-md md:flex-row">
-      <input
-        type="text"
-        placeholder="Search by facility name or location"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full rounded-md border border-gray-100 p-2 text-gray-500 md:w-1/3"
-      />
-      <div className="mt-4 flex items-center md:mt-0">
+      <div className="mb-4 w-full md:mb-0 md:w-1/3">
         <input
-          type="number"
-          placeholder="Min Price"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-          className="mr-2 rounded-md border border-gray-100 p-2 text-gray-500"
+          type="text"
+          placeholder="Search by facility name or location"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full rounded-md border border-gray-100 p-2 text-gray-500"
         />
-        <input
-          type="number"
-          placeholder="Max Price"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-          className="mr-2 rounded-md border border-gray-100 p-2 text-gray-500"
-        />
+      </div>
+      <div className="flex w-full flex-col items-center md:w-auto md:flex-row">
+        <div className="mb-4 flex w-full flex-row justify-between md:mb-0 md:w-auto">
+          <input
+            type="number"
+            placeholder="Min Price"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className="mr-2 w-[48%] rounded-md border border-gray-100 p-2 text-gray-500 md:w-auto"
+          />
+          <input
+            type="number"
+            placeholder="Max Price"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="mr-2 w-[48%] rounded-md border border-gray-100 p-2 text-gray-500 md:w-auto"
+          />
+        </div>
+        <div className="flex w-full justify-center md:w-auto">
+          <button
+            onClick={handleFilter}
+            className={`w-full rounded-md bg-primary-500 p-2 text-white md:w-auto ${
+              isFilterDisabled ? "cursor-not-allowed opacity-50" : ""
+            }`}
+            disabled={isFilterDisabled}
+          >
+            Filter
+          </button>
+        </div>
+      </div>
+      <div className="mt-4 w-full md:mt-0 md:w-auto">
         <button
-          onClick={handleFilter}
-          className="rounded-md bg-primary-500 p-2 text-white"
-          disabled={isFilterDisabled}
+          onClick={handleSearch}
+          className="w-full rounded-md bg-primary-500 p-2 text-white md:w-auto"
         >
-          Filter
+          Search
         </button>
       </div>
-      <button
-        onClick={handleSearch}
-        className="mt-4 rounded-md bg-primary-500 p-2 text-white md:mt-0"
-      >
-        Search
-      </button>
     </div>
   );
 };

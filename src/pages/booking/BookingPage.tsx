@@ -1,19 +1,20 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/redux/store/hooks";
+import { RootState } from "@/redux/store/store";
 import {
   selectCurrentUser,
   useCurrentToken,
 } from "@/redux/features/auth/authSlice";
 import { useCreateBookingMutation } from "@/redux/features/bookings/bookingApi";
-import { useAppSelector } from "@/redux/store/hooks";
-import { RootState } from "@/redux/store/store";
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const BookingPage: React.FC = () => {
+  const navigate = useNavigate();
   const token = useAppSelector(useCurrentToken);
   const user = useAppSelector(selectCurrentUser);
-  const facility = useSelector((state: RootState) => state.booking.facility);
-  console.log(facility);
+  const facility = useAppSelector((state: RootState) => state.booking.facility);
+
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [availability, setAvailability] = useState<string[]>([]);
   const [bookingDetails, setBookingDetails] = useState<{
@@ -24,27 +25,31 @@ const BookingPage: React.FC = () => {
     endTime: "",
   });
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Use the createBooking mutation hook from RTK Query
-  const [createBooking, { isLoading, isError, error }] =
+  const [createBooking, { isLoading, isError, error: apiError }] =
     useCreateBookingMutation();
 
   useEffect(() => {
     if (!facility) {
-      // Handle case when no facility is selected
-      // Redirect or show a message
+      // Redirect to home if no facility is selected
+      navigate("/");
     }
-  }, [facility]);
+  }, [facility, navigate]);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(event.target.value);
   };
 
   const checkAvailability = async () => {
-    // Replace with actual API call
-    // Example: const response = await fetch(`/api/availability?date=${selectedDate}`);
-    // const data = await response.json();
+    if (!selectedDate) {
+      setError("Please select a date to check availability.");
+      return;
+    }
 
+    setError(null);
+    // Simulate API call
+    // Example response: setAvailability(["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"]);
     setAvailability(["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"]);
   };
 
@@ -56,11 +61,6 @@ const BookingPage: React.FC = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const formatTime = (time: string) => {
-    const [hours, minutes] = time.split(":");
-    return `${hours}:${minutes}:00`;
   };
 
   const calculatePayableAmount = () => {
@@ -90,17 +90,17 @@ const BookingPage: React.FC = () => {
       isBooked: "confirmed",
     };
 
-    console.log("BOOKING DATA TO BE SENT:", bookingData);
-
     try {
       const response = await createBooking({ token, bookingData }).unwrap();
       toast.success("Booking done");
+      setConfirmation("Booking confirmed!");
+      navigate("/");
     } catch (err) {
       setConfirmation(`Error: ${(err as Error).message}`);
     }
   };
 
-  if (!facility) return <div>No facility selected for booking.</div>;
+  if (!facility) return null; // Redirect handled by useEffect
 
   return (
     <div className="container mx-auto my-20 p-4">
@@ -138,6 +138,7 @@ const BookingPage: React.FC = () => {
         >
           Check Availability
         </button>
+        {error && <p className="mt-4 text-red-600">{error}</p>}
         {availability.length > 0 && (
           <div className="mt-4">
             <h3 className="text-lg font-semibold text-gray-800">
@@ -217,7 +218,7 @@ const BookingPage: React.FC = () => {
         <div className="mt-6 rounded-lg bg-red-100 p-4 shadow-md">
           <h2 className="mb-4 text-xl font-semibold text-red-800">Error</h2>
           <p className="text-red-700">
-            An error occurred: {(error as Error).message}
+            An error occurred: {(apiError as Error).message}
           </p>
         </div>
       )}
