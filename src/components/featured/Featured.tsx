@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const childVariant = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -47,9 +48,11 @@ const Facility = ({
       </p>
       <p className="text-sm text-gray-600">Location: {location}</p>
 
-      <button className="hover:bg-primary-600 mt-4 rounded-lg bg-primary-500 px-6 py-2 text-white shadow-md transition-colors">
-        Book Now
-      </button>
+      <NavLink to={"/facilities"}>
+        <button className="hover:bg-primary-600 mt-4 rounded-lg bg-primary-500 px-6 py-2 text-white shadow-md transition-colors">
+          Book Now
+        </button>
+      </NavLink>
     </motion.div>
   );
 };

@@ -1,45 +1,16 @@
 import React from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
-
-interface Facility {
-  id: string;
-  image: string;
-  name: string;
-  pricePerHour: number;
-  description: string;
-}
-
-const facilityData: Record<string, Facility> = {
-  "1": {
-    id: "1",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663039984787-b11d7240f592?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    name: "Tennis Court",
-    pricePerHour: 30,
-    description: "Outdoor tennis court with synthetic surface.",
-  },
-  "2": {
-    id: "2",
-    image: "/images/swimming_pool_large.jpg",
-    name: "Swimming Pool",
-    pricePerHour: 50,
-    description: "Olympic-sized pool with heated water.",
-  },
-  "3": {
-    id: "3",
-    image: "/images/basketball_court_large.jpg",
-    name: "Basketball Court",
-    pricePerHour: 40,
-    description: "Indoor court with hardwood flooring.",
-  },
-};
+import { useGetFacilityByIdQuery } from "@/redux/features/facilities/facilitiesApi";
 
 const FacilityDetailsPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Get the facility id from URL params
-  const navigate = useNavigate(); // Hook for navigation
-  const facility = facilityData[id]; // Get the facility data based on the id
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { data, error, isLoading } = useGetFacilityByIdQuery(id!);
 
-  if (!facility) {
+  const facility = data?.data;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error || !facility) {
     return (
       <div className="container mx-auto mt-20 p-4 text-center">
         <h1 className="text-2xl font-bold text-red-600">Facility Not Found</h1>
@@ -47,7 +18,7 @@ const FacilityDetailsPage: React.FC = () => {
           The facility you are looking for does not exist.
         </p>
         <button
-          onClick={() => navigate("/facilities")} // Navigate to the facilities listing page
+          onClick={() => navigate("/facilities")}
           className="mt-4 rounded-md bg-primary-500 px-4 py-2 text-white"
         >
           Back to Facilities
@@ -74,7 +45,7 @@ const FacilityDetailsPage: React.FC = () => {
           <div className="mt-4 flex space-x-4">
             <NavLink to={"/booking"}>
               <button
-                onClick={() => console.log(`Booking facility with ID: ${id}`)} // Placeholder for booking functionality
+                onClick={() => console.log(`Booking facility with ID: ${id}`)}
                 className="rounded-md bg-primary-500 px-4 py-2 text-white"
               >
                 Book Now

@@ -15,6 +15,8 @@ const FacilityListingPage: React.FC = () => {
   const [filteredFacilities, setFilteredFacilities] = useState<Facility[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [priceRange, setPriceRange] = useState<number[]>([0, Infinity]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const facilitiesPerPage = 9;
 
   useEffect(() => {
     if (facilitiesData) {
@@ -38,11 +40,31 @@ const FacilityListingPage: React.FC = () => {
     [facilitiesData]
   );
 
-  const handleSearch = (query: string) => setSearchQuery(query);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on search
+  };
 
-  const handleFilter = (priceRange: number[]) => setPriceRange(priceRange);
+  const handleFilter = (priceRange: number[]) => {
+    setPriceRange(priceRange);
+    setCurrentPage(1); // Reset to first page on filter
+  };
 
   const handleViewDetails = (id: string) => navigate(`/facilities/${id}`);
+
+  // Pagination logic
+  const indexOfLastFacility = currentPage * facilitiesPerPage;
+  const indexOfFirstFacility = indexOfLastFacility - facilitiesPerPage;
+  const currentFacilities = filteredFacilities.slice(
+    indexOfFirstFacility,
+    indexOfLastFacility
+  );
+  const totalPages = Math.ceil(filteredFacilities.length / facilitiesPerPage);
+
+  const goToNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPreviousPage = () =>
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading facilities</div>;
@@ -51,10 +73,10 @@ const FacilityListingPage: React.FC = () => {
     <div className="container mx-auto mt-20 p-4">
       <SearchAndFilters onSearch={handleSearch} onFilter={handleFilter} />
       <div className="lg:grid-cols-4 mb-20 mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {filteredFacilities.length === 0 ? (
+        {currentFacilities.length === 0 ? (
           <div>No facilities found</div>
         ) : (
-          filteredFacilities.map((facility) => (
+          currentFacilities.map((facility) => (
             <FacilityCard
               key={facility._id}
               id={facility._id}
@@ -66,6 +88,23 @@ const FacilityListingPage: React.FC = () => {
             />
           ))
         )}
+      </div>
+      {/* Pagination Controls */}
+      <div className="mt-4 flex justify-center">
+        <button
+          className="mx-2 rounded bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="mx-2 rounded bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
