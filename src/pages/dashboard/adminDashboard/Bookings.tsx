@@ -5,6 +5,7 @@ import { useAppSelector } from "@/redux/store/hooks";
 import { useCurrentToken } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
 import { useGetAllBookingsQuery } from "@/redux/features/bookings/bookingApi";
+import LoadingSpinner from "@/components/loader/Loader";
 
 interface Facility {
   _id: string;
@@ -51,7 +52,7 @@ const Bookings: React.FC = () => {
     }),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading bookings</div>;
 
   const handleCancel = async (id: string) => {

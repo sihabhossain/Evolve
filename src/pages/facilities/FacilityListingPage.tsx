@@ -4,6 +4,7 @@ import FacilityCard from "@/components/facilityCard/FacilityCard";
 import SearchAndFilters from "@/components/search&filter/SearchAndFilters";
 import { useGetAllFacilitiesQuery } from "@/redux/features/facilities/facilitiesApi";
 import { Facility } from "@/types/types";
+import LoadingSpinner from "@/components/loader/Loader";
 
 const FacilityListingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const FacilityListingPage: React.FC = () => {
   const goToPreviousPage = () =>
     setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading facilities</div>;
 
   return (
