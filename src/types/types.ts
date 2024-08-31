@@ -16,3 +16,13 @@ export type FormData = {
   address?: string;
   role?: string;
 };
+
+export interface Facility {
+  _id: string;
+  name: string;
+  description: string;
+  pricePerHour: number;
+  location: string;
+  image: string;
+  isDeleted: boolean;
+}

@@ -1,82 +1,71 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import FacilityCard from "@/components/facilityCard/FacilityCard";
 import SearchAndFilters from "@/components/search&filter/SearchAndFilters";
-
-interface Facility {
-  id: string;
-  image: string;
-  name: string;
-  pricePerHour: number;
-  description: string;
-}
+import { useGetAllFacilitiesQuery } from "@/redux/features/facilities/facilitiesApi";
+import { Facility } from "@/types/types";
 
 const FacilityListingPage: React.FC = () => {
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
+  const {
+    data: facilitiesData,
+    error,
+    isLoading,
+  } = useGetAllFacilitiesQuery(undefined);
+  const [filteredFacilities, setFilteredFacilities] = useState<Facility[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [priceRange, setPriceRange] = useState<number[]>([0, Infinity]);
 
-  const [facilities, setFacilities] = React.useState<Facility[]>([
-    // Example data
-    {
-      id: "1",
-      image:
-        "https://plus.unsplash.com/premium_photo-1663039984787-b11d7240f592?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Tennis Court",
-      pricePerHour: 30,
-      description: "Outdoor tennis court with synthetic surface.",
+  useEffect(() => {
+    if (facilitiesData) {
+      filterFacilities(searchQuery, priceRange);
+    }
+  }, [facilitiesData, searchQuery, priceRange]);
+
+  const filterFacilities = useCallback(
+    (query: string, price: number[]) => {
+      const filtered = facilitiesData?.data?.filter((facility: Facility) => {
+        const matchesSearch = facility.name
+          .toLowerCase()
+          .includes(query.toLowerCase());
+        const matchesPrice =
+          facility.pricePerHour >= price[0] &&
+          facility.pricePerHour <= price[1];
+        return matchesSearch && matchesPrice;
+      });
+      setFilteredFacilities(filtered || []);
     },
-    {
-      id: "2",
-      image:
-        "https://images.unsplash.com/photo-1496033604106-04799291ee86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Swimming Pool",
-      pricePerHour: 50,
-      description: "Olympic-sized pool with heated water.",
-    },
-    {
-      id: "3",
-      image:
-        "https://images.unsplash.com/photo-1529887158701-161d0eb81a6d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Basketball Court",
-      pricePerHour: 40,
-      description: "Indoor court with hardwood flooring.",
-    },
-  ]);
+    [facilitiesData]
+  );
 
-  const handleSearch = (query: string) => {
-    const filteredFacilities = facilities.filter((facility) =>
-      facility.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFacilities(filteredFacilities);
-  };
+  const handleSearch = (query: string) => setSearchQuery(query);
 
-  const handleFilter = (priceRange: number[]) => {
-    const filteredFacilities = facilities.filter(
-      (facility) =>
-        facility.pricePerHour >= priceRange[0] &&
-        facility.pricePerHour <= priceRange[1]
-    );
-    setFacilities(filteredFacilities);
-  };
+  const handleFilter = (priceRange: number[]) => setPriceRange(priceRange);
 
-  const handleViewDetails = (id: string) => {
-    navigate(`/facilities/${id}`); // Navigate to the details page
-  };
+  const handleViewDetails = (id: string) => navigate(`/facilities/${id}`);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading facilities</div>;
 
   return (
     <div className="container mx-auto mt-20 p-4">
       <SearchAndFilters onSearch={handleSearch} onFilter={handleFilter} />
-      <div className="lg:grid-cols-4 mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {facilities.map((facility) => (
-          <FacilityCard
-            key={facility.id}
-            id={facility.id}
-            image={facility.image}
-            name={facility.name}
-            pricePerHour={facility.pricePerHour}
-            description={facility.description}
-            onViewDetails={handleViewDetails}
-          />
-        ))}
+      <div className="lg:grid-cols-4 mb-20 mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {filteredFacilities.length === 0 ? (
+          <div>No facilities found</div>
+        ) : (
+          filteredFacilities.map((facility) => (
+            <FacilityCard
+              key={facility._id}
+              id={facility._id}
+              image={facility.image}
+              name={facility.name}
+              pricePerHour={facility.pricePerHour}
+              description={facility.description}
+              onViewDetails={handleViewDetails}
+            />
+          ))
+        )}
       </div>
     </div>
   );

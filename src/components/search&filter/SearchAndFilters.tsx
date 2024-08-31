@@ -5,16 +5,28 @@ const SearchAndFilters: React.FC<{
   onFilter: (priceRange: number[]) => void;
 }> = ({ onSearch, onFilter }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [minPrice, setMinPrice] = useState<string>("0");
+  const [maxPrice, setMaxPrice] = useState<string>("100");
 
   const handleSearch = () => {
     onSearch(searchQuery);
   };
 
   const handleFilter = () => {
-    onFilter([minPrice, maxPrice]);
+    const min = Number(minPrice) || 0;
+    const max = Number(maxPrice) || 0;
+    if (min <= max) {
+      onFilter([min, max]);
+    }
   };
+
+  // Validate if filter button should be disabled
+  const isFilterDisabled =
+    !minPrice ||
+    !maxPrice ||
+    Number(minPrice) < 0 ||
+    Number(maxPrice) < 0 ||
+    Number(minPrice) > Number(maxPrice);
 
   return (
     <div className="flex flex-col items-center justify-between rounded-lg bg-gray-20 p-4 shadow-md md:flex-row">
@@ -30,19 +42,20 @@ const SearchAndFilters: React.FC<{
           type="number"
           placeholder="Min Price"
           value={minPrice}
-          onChange={(e) => setMinPrice(Number(e.target.value))}
+          onChange={(e) => setMinPrice(e.target.value)}
           className="mr-2 rounded-md border border-gray-100 p-2 text-gray-500"
         />
         <input
           type="number"
           placeholder="Max Price"
           value={maxPrice}
-          onChange={(e) => setMaxPrice(Number(e.target.value))}
+          onChange={(e) => setMaxPrice(e.target.value)}
           className="mr-2 rounded-md border border-gray-100 p-2 text-gray-500"
         />
         <button
           onClick={handleFilter}
-          className="rounded-md bg-primary-300 p-2 text-white"
+          className="rounded-md bg-primary-500 p-2 text-white"
+          disabled={isFilterDisabled}
         >
           Filter
         </button>
