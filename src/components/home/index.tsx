@@ -38,7 +38,7 @@ const Home = () => {
             <div className="relative">
               <div className="before:absolute before:-left-20 before:-top-20 before:z-[-1] md:before:content-evolvetext">
                 <h1>
-                  <span className="font-bold text-secondary-500 md:text-6xl">
+                  <span className="text-secondary-500 font-bold md:text-6xl">
                     Book Your Playtime,
                   </span>
                   <div>
@@ -64,10 +64,12 @@ const Home = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <NavLink to={"/facilities"}>
-              <ActionButton>Book Now</ActionButton>
+              <button className="rounded-lg bg-primary-500 px-6 py-3 text-white">
+                Book Now
+              </button>
             </NavLink>
             <AnchorLink
-              className="text-sm font-bold text-primary-500 underline hover:text-secondary-500"
+              className="hover:text-secondary-500 text-sm font-bold text-primary-500 underline"
               href={`#${SelectedPage.ContactUs}`}
             >
               <p>Learn More</p>

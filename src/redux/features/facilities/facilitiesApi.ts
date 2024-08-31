@@ -9,6 +9,7 @@ const facilitiesApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
     // New API call to get a facility by ID
     getFacilityById: builder.query({
       query: (id: string) => ({
@@ -16,8 +17,24 @@ const facilitiesApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    // Updated API call to add a new facility
+    addNewFacility: builder.mutation({
+      query: ({ token, facilityData }) => ({
+        url: "/api/facility",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(facilityData),
+      }),
+    }),
   }),
 });
 
-export const { useGetAllFacilitiesQuery, useGetFacilityByIdQuery } =
-  facilitiesApi;
+export const {
+  useGetAllFacilitiesQuery,
+  useGetFacilityByIdQuery,
+  useAddNewFacilityMutation,
+} = facilitiesApi;

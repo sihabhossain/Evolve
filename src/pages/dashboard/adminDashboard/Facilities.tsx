@@ -1,156 +1,124 @@
-import React from "react";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
+import { useAddNewFacilityMutation } from "@/redux/features/facilities/facilitiesApi";
+import { useAppSelector } from "@/redux/store/hooks";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
-const FacilitiesPage: React.FC = () => {
-  // Sample static data with images
-  const facilities = [
-    {
-      title: "Football Field",
-      description: "A large field for playing football.",
-      pricePerHour: "$50",
-      location: "North Park",
-      isDeleted: false,
-      image: "https://via.placeholder.com/100", // Placeholder image URL
-    },
-    {
-      title: "Tennis Court",
-      description: "A court for playing tennis.",
-      pricePerHour: "$30",
-      location: "East Park",
-      isDeleted: false,
-      image: "https://via.placeholder.com/100", // Placeholder image URL
-    },
-    {
-      title: "Basketball Court",
-      description: "A court for playing basketball.",
-      pricePerHour: "$40",
-      location: "West Park",
-      isDeleted: true,
-      image: "https://via.placeholder.com/100", // Placeholder image URL
-    },
-    // Add more sample data as needed
-  ];
+const AddFacility: React.FC = () => {
+  const token = useAppSelector(useCurrentToken);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    image: "",
+    pricePerHour: "",
+    location: "",
+  });
+
+  const [addNewFacility, { isLoading, isSuccess, isError, error }] =
+    useAddNewFacilityMutation();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Prepare data
+    const facilityData = {
+      name: formData.name,
+      description: formData.description,
+      image: formData.image,
+      pricePerHour: parseFloat(formData.pricePerHour),
+      location: formData.location,
+    };
+
+    console.log(facilityData);
+
+    try {
+      // Call the mutation function
+      await addNewFacility({ token, facilityData }).unwrap();
+      // Handle success (e.g., show a success message or reset the form)
+      toast.success("Facility added successfully");
+      setFormData({
+        name: "",
+        description: "",
+        image: "",
+        pricePerHour: "",
+        location: "",
+      });
+    } catch (error) {
+      // Handle error (e.g., show an error message)
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 p-4 text-gray-100">
-      <h2 className="mb-6 text-2xl font-semibold">Facility Management</h2>
-
-      {/* Add New Facility Form */}
+      <h2 className="mb-6 text-2xl font-semibold">Add New Facility</h2>
       <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
-        <h3 className="mb-4 text-xl font-semibold">Add New Facility</h3>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Title"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
             className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
           />
           <textarea
+            name="description"
             placeholder="Description"
-            className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
+            value={formData.description}
+            onChange={handleChange}
             rows={3}
-          />
-          <input
-            type="text"
-            placeholder="Price Per Hour"
             className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
           />
           <input
             type="text"
-            placeholder="Location"
-            className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
-          />
-          <input
-            type="text"
+            name="image"
             placeholder="Image URL"
+            value={formData.image}
+            onChange={handleChange}
+            className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
+          />
+          <input
+            type="number"
+            name="pricePerHour"
+            placeholder="Price Per Hour"
+            value={formData.pricePerHour}
+            onChange={handleChange}
+            className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={formData.location}
+            onChange={handleChange}
             className="w-full rounded border border-gray-700 bg-gray-700 p-2 text-gray-100"
           />
           <button
             type="submit"
             className="w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
+            disabled={isLoading}
           >
-            Add Facility
+            {isLoading ? "Adding..." : "Add Facility"}
           </button>
+          {isError && (
+            <div className="text-red-500">Error: {"Something went wrong"}</div>
+          )}
+          {isSuccess && (
+            <div className="text-green-500">Facility added successfully!</div>
+          )}
         </form>
-      </div>
-
-      {/* Facilities List */}
-      <div className="rounded-lg bg-gray-800 p-6 shadow-lg">
-        <h3 className="mb-4 text-xl font-semibold">Facilities List</h3>
-        <div className="overflow-x-auto">
-          <div className="max-h-[60vh] overflow-y-auto">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-700">
-                <tr>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Image
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Title
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Description
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Price Per Hour
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Location
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Status
-                  </th>
-                  <th className="px-2 py-2 text-left text-sm font-medium text-gray-100">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700 bg-gray-800">
-                {facilities.map((facility, index) => (
-                  <tr key={index} className="hover:bg-gray-700">
-                    <td className="px-2 py-2 text-sm">
-                      <img
-                        src={facility.image}
-                        alt={facility.title}
-                        className="h-20 w-20 rounded object-cover"
-                      />
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-300">
-                      {facility.title}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-300">
-                      {facility.description}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-300">
-                      {facility.pricePerHour}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-300">
-                      {facility.location}
-                    </td>
-                    <td className="px-2 py-2 text-sm">
-                      {facility.isDeleted ? (
-                        <span className="text-red-500">Deleted</span>
-                      ) : (
-                        <span className="text-green-500">Active</span>
-                      )}
-                    </td>
-                    <td className="px-2 py-2 text-sm">
-                      <div className="flex justify-center space-x-2">
-                        <button className="text-blue-500 hover:text-blue-700">
-                          Edit
-                        </button>
-                        <button className="text-red-500 hover:text-red-700">
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   );
 };
 
-export default FacilitiesPage;
+export default AddFacility;
