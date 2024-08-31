@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
+import bookingReducer from "../features/bookings/bookingSlice";
 import { baseApi } from "../api/baseApi";
 import storage from "redux-persist/lib/storage";
 import {
@@ -22,6 +23,7 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
+    booking: bookingReducer,
     auth: persistedAuthReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },

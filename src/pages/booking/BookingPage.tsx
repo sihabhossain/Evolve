@@ -1,23 +1,19 @@
-import React, { useState } from "react";
-
-interface Facility {
-  id: string;
-  image: string;
-  name: string;
-  pricePerHour: number;
-  description: string;
-}
-
-const mockFacility: Facility = {
-  id: "1",
-  image:
-    "https://plus.unsplash.com/premium_photo-1663039984787-b11d7240f592?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  name: "Tennis Court",
-  pricePerHour: 30,
-  description: "Outdoor tennis court with synthetic surface.",
-};
+import {
+  selectCurrentUser,
+  useCurrentToken,
+} from "@/redux/features/auth/authSlice";
+import { useCreateBookingMutation } from "@/redux/features/bookings/bookingApi";
+import { useAppSelector } from "@/redux/store/hooks";
+import { RootState } from "@/redux/store/store";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const BookingPage: React.FC = () => {
+  const token = useAppSelector(useCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
+  const facility = useSelector((state: RootState) => state.booking.facility);
+  console.log(facility);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [availability, setAvailability] = useState<string[]>([]);
   const [bookingDetails, setBookingDetails] = useState<{
@@ -27,13 +23,28 @@ const BookingPage: React.FC = () => {
     startTime: "",
     endTime: "",
   });
+  const [confirmation, setConfirmation] = useState<string | null>(null);
+
+  // Use the createBooking mutation hook from RTK Query
+  const [createBooking, { isLoading, isError, error }] =
+    useCreateBookingMutation();
+
+  useEffect(() => {
+    if (!facility) {
+      // Handle case when no facility is selected
+      // Redirect or show a message
+    }
+  }, [facility]);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(event.target.value);
   };
 
-  const checkAvailability = () => {
-    // Placeholder for checking availability
+  const checkAvailability = async () => {
+    // Replace with actual API call
+    // Example: const response = await fetch(`/api/availability?date=${selectedDate}`);
+    // const data = await response.json();
+
     setAvailability(["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"]);
   };
 
@@ -47,28 +58,65 @@ const BookingPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    // Placeholder for booking submission
-    alert("Booking submitted!");
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(":");
+    return `${hours}:${minutes}:00`;
   };
+
+  const calculatePayableAmount = () => {
+    if (facility && bookingDetails.startTime && bookingDetails.endTime) {
+      const start = new Date(`1970-01-01T${bookingDetails.startTime}`);
+      const end = new Date(`1970-01-01T${bookingDetails.endTime}`);
+      const durationInHours =
+        (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+      return Math.ceil(durationInHours) * facility.pricePerHour;
+    }
+    return 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!token || !facility) {
+      setConfirmation("Error: Missing token or facility information.");
+      return;
+    }
+
+    const bookingData = {
+      date: selectedDate,
+      startTime: bookingDetails.startTime + ":00",
+      endTime: bookingDetails.endTime + ":00",
+      user: user?._id,
+      facility: facility._id,
+      payableAmount: calculatePayableAmount(),
+      isBooked: "confirmed",
+    };
+
+    console.log("BOOKING DATA TO BE SENT:", bookingData);
+
+    try {
+      const response = await createBooking({ token, bookingData }).unwrap();
+      toast.success("Booking done");
+    } catch (err) {
+      setConfirmation(`Error: ${(err as Error).message}`);
+    }
+  };
+
+  if (!facility) return <div>No facility selected for booking.</div>;
 
   return (
     <div className="container mx-auto my-20 p-4">
       {/* Facility Overview */}
       <div className="mb-6 flex flex-col rounded-lg bg-white p-4 shadow-md md:flex-row">
         <img
-          src={mockFacility.image}
-          alt={`Image of ${mockFacility.name}`}
+          src={facility.image}
+          alt={`Image of ${facility.name}`}
           className="h-64 w-full rounded-lg object-cover md:w-1/2"
         />
         <div className="flex flex-col justify-center md:ml-6">
-          <h1 className="text-3xl font-bold text-gray-800">
-            {mockFacility.name}
-          </h1>
-          <p className="mt-2 text-gray-700">{mockFacility.description}</p>
+          <h1 className="text-3xl font-bold text-gray-800">{facility.name}</h1>
+          <p className="mt-2 text-gray-700">{facility.description}</p>
           <p className="mt-2 text-gray-700">
             Price per hour:{" "}
-            <span className="font-semibold">${mockFacility.pricePerHour}</span>
+            <span className="font-semibold">${facility.pricePerHour}</span>
           </p>
         </div>
       </div>
@@ -142,22 +190,37 @@ const BookingPage: React.FC = () => {
             type="button"
             onClick={handleSubmit}
             className="rounded-md bg-primary-500 px-4 py-2 text-white"
+            disabled={isLoading}
           >
-            Confirm Booking
+            {isLoading ? "Submitting..." : "Confirm Booking"}
           </button>
         </form>
       </div>
 
       {/* Confirmation */}
-      <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Booking Summary
-        </h2>
-        <p className="text-gray-700">Facility: {mockFacility.name}</p>
-        <p className="text-gray-700">Date: {selectedDate}</p>
-        <p className="text-gray-700">Start Time: {bookingDetails.startTime}</p>
-        <p className="text-gray-700">End Time: {bookingDetails.endTime}</p>
-      </div>
+      {confirmation && (
+        <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">
+            Booking Summary
+          </h2>
+          <p className="text-gray-700">Facility: {facility.name}</p>
+          <p className="text-gray-700">Date: {selectedDate}</p>
+          <p className="text-gray-700">
+            Start Time: {bookingDetails.startTime}
+          </p>
+          <p className="text-gray-700">End Time: {bookingDetails.endTime}</p>
+          <p className="mt-4 text-green-600">{confirmation}</p>
+        </div>
+      )}
+
+      {isError && (
+        <div className="mt-6 rounded-lg bg-red-100 p-4 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold text-red-800">Error</h2>
+          <p className="text-red-700">
+            An error occurred: {(error as Error).message}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

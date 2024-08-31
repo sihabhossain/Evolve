@@ -1,10 +1,13 @@
 import React from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useGetFacilityByIdQuery } from "@/redux/features/facilities/facilitiesApi";
+import { setFacility } from "@/redux/features/bookings/bookingSlice";
 
 const FacilityDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data, error, isLoading } = useGetFacilityByIdQuery(id!);
 
   const facility = data?.data;
@@ -27,6 +30,11 @@ const FacilityDetailsPage: React.FC = () => {
     );
   }
 
+  const handleBookNow = () => {
+    dispatch(setFacility(facility));
+    navigate("/booking");
+  };
+
   return (
     <div className="container mx-auto mt-20 p-4">
       <div className="flex flex-col md:flex-row">
@@ -45,7 +53,7 @@ const FacilityDetailsPage: React.FC = () => {
           <div className="mt-4 flex space-x-4">
             <NavLink to={"/booking"}>
               <button
-                onClick={() => console.log(`Booking facility with ID: ${id}`)}
+                onClick={handleBookNow}
                 className="rounded-md bg-primary-500 px-4 py-2 text-white"
               >
                 Book Now
