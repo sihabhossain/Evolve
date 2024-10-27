@@ -17,7 +17,11 @@ const AuthPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: isLogin
+      ? { email: "sihab@gmail.com", password: "sih@b321" }
+      : {},
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [FormError, setFormError] = useState<string>("");
 
